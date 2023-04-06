@@ -8,12 +8,12 @@
         <div class="mt-4">
             <x-input-label for="password" :value="__('Old Password')" />
 
-            <x-text-input id="old_password" class="block mt-1 w-full"
+            <x-text-input id="current_password" class="block mt-1 w-full"
                             type="password"
-                            name="old_password"
+                            name="current_password"
                             required autocomplete="new-password" />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <x-input-error :messages="$errors->get('current_password')" class="mt-2" />
         </div>
         <!-- Password -->
         <div class="mt-4">
