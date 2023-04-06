@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -29,10 +30,18 @@ class NewPasswordController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', 
+                            ['required', 'confirmed', Rules\Password::min(10)
+                                    ->letters()
+                                    ->mixedCase()
+                                    ->numbers()
+                                    ->symbols()
+                            ]
+                        ],
         ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
@@ -44,6 +53,8 @@ class NewPasswordController extends Controller
                 $user->forceFill([
                     'password' => Hash::make($request->password),
                     'remember_token' => Str::random(60),
+                    'password_expired_at' => Carbon::now()->addDays(config('auth.password_expiry_days'))->toDateTimeString(),
+                    'password_reset_at' => Carbon::now()->toDateTimeString()
                 ])->save();
 
                 event(new PasswordReset($user));
