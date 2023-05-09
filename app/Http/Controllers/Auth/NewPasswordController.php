@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PasswordRequest;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\RedirectResponse;
@@ -28,21 +29,21 @@ class NewPasswordController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(PasswordRequest $request): RedirectResponse
     {
         
-        $request->validate([
-            'token' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', 
-                            ['required', 'confirmed', Rules\Password::min(10)
-                                    ->letters()
-                                    ->mixedCase()
-                                    ->numbers()
-                                    ->symbols()
-                            ]
-                        ],
-        ]);
+        // $request->validate([
+        //     'token' => ['required'],
+        //     'email' => ['required', 'email'],
+        //     'password' => ['required', 'confirmed', 
+        //                     ['required', 'confirmed', Rules\Password::min(10)
+        //                             ->letters()
+        //                             ->mixedCase()
+        //                             ->numbers()
+        //                             ->symbols()
+        //                     ]
+        //                 ],
+        // ]);
 
         // Here we will attempt to reset the user's password. If it is successful we
         // will update the password on an actual user model and persist it to the

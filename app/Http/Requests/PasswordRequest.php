@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PasswordHistory;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class PasswordRequest extends FormRequest
 {
@@ -11,7 +13,7 @@ class PasswordRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +24,16 @@ class PasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'current_password' => 'required',
+            'password' => ['required', 
+                'confirmed', 
+                Password::min(10)
+                            ->letters()
+                            ->mixedCase()
+                            ->numbers()
+                            ->symbols(),  
+                new PasswordHistory($this->request)
+             ],
         ];
     }
 }
