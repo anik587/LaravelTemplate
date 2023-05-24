@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,11 @@ Route::get('/', function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Auth::routes();
+
+Route::resource('roles', RoleController::class)->names('roles');
+
+
+
+
+
+Route::resource('roles', App\Http\Controllers\RoleController::class);
