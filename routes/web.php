@@ -1,12 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Resources\ProductController;
-use App\Http\Controllers\Resources\RoleController;
-use App\Http\Controllers\Resources\UserController;
-use App\Http\Controllers\Auth\ExpiredPasswordController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Auth\ExpiredPasswordController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,10 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require __DIR__.'/auth.php';
-
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::middleware(['auth', 'verified', 'password_expired'])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 });
 
 Route::middleware('auth')->group(function () {
@@ -29,16 +28,4 @@ Route::middleware('auth')->group(function () {
     Route::post('password/post_expired', [ExpiredPasswordController::class, 'postExpired'])->name('password.post_expired');
 });
 
-Route::middleware(['auth', 'verified', 'password_expired'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::resource('roles', RoleController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('products', ProductController::class);
-});
-
-
+Auth::routes(['register' => false]);

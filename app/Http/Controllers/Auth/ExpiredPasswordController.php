@@ -16,6 +16,7 @@ class ExpiredPasswordController extends Controller
 
     public function postExpired(Request $request) 
     {
+        //dd('ok');
         if (!Hash::check($request->current_password, $request->user()->password)) {
             return redirect()->back()->withErrors(['current_password' => 'Current password is not correct']);
         }
@@ -27,7 +28,6 @@ class ExpiredPasswordController extends Controller
         ]);
 
         $request->session()->regenerate();
-        //dd($request->session());
         return redirect('/');
     }
 }

@@ -111,7 +111,11 @@ return [
     */
 
     'password_timeout' => 10800,
-    'password_expiry_days' => 45,
-    'password_history_cnt' => 5
+
+    'password_expiry_days' => env('PASSWORD_EXPIRY_DAYS', 45),
+
+    'password_history_cnt' => env('PASSWORD_HISTORY_CNT', 10),
+
+    'password_change_min_duration' => env('PASSWORD_CHANGE_MIN_DURATION', 1),
 
 ];
